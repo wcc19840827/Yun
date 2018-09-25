@@ -2,30 +2,34 @@
 <view class="container">
 
  <!-- test -->
- <view class="uploader">
-    <view class="uploader-text" bindtap="onPostApi">
+ <!-- <view class="uploader">
+    <view class="uploader-text" bindtap="onTest">
       <text>API-test</text>
     </view>
+  </view> -->
+
+  <view class="uploader">
+    <view class="tunnel-text"><text>我是用户</text></view>
+    <view class="uploader-text" bindtap="GetKYCInfo"><text>展示自己的KYC信息</text></view>
   </view>
 
   <view class="uploader">
-    <view class="uploader-text" bindtap="onPostApi"><text>我是用户</text></view>
-    <view class="uploader-text" bindtap="onPostApi"><text>我是用户</text></view>
+    <view class="tunnel-text"><text>我是银行</text></view>
+    <view class="uploader-text" bindtap="Balance"><text>查看ETH余额</text></view>
+    <view class="uploader-text" bindtap="Regist"><text>上传用户信息</text></view>
   </view>
 
   <view class="uploader">
-    <view class="uploader-text"><text>我是银行</text></view>
-    <view class="uploader-text" bindtap="onPostApi"><text>上传用户信息</text></view>
+    <view class="tunnel-text"><text>我是管理员</text></view>
+    <view class="uploader-text" bindtap="mgrBalance"><text>查看ETH余额</text></view>
   </view>
 
-  <view>_____________</view>
+  <view>_</view>
   <view>返回结果</view>
   <view class="apiresult">{{toastText}}</view>
-    <!-- <text>{{toastText}}</text>
-   <textarea>{{toastText}}</textarea> -->
 
   <!-- 用户 openid -->
-  <!-- <view class="userinfo">
+  <view class="userinfo">
     <button 
       open-type="getUserInfo" 
       bindgetuserinfo="onGetUserInfo"
@@ -35,7 +39,7 @@
     <view>
       <button class="userinfo-nickname" bindtap="onGetOpenid">点击获取 openid</button>
     </view>
-  </view> -->
+  </view>
 
   <!-- 上传图片 -->
   <!-- <view class="uploader">

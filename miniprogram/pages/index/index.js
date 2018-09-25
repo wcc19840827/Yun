@@ -10,6 +10,61 @@ Page({
     requestResult: ''
   },
 
+  //wcc
+  DoPostApi: function (api,data) {
+    // post方式调用API
+    that = this;
+    wx.request({
+      url: "http://192.168.80.35:5123/" + api,
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      method: "POST",
+      //data: Util.json2Form({ cityname: "上海", key: "1430ec127e097e1113259c5e1be1ba70" }),
+      data: data,
+
+      complete: function (res) {
+        console.info(res.data);
+        var tmp = Util.json2Show(res.data);
+        while (tmp.indexOf('%20')!=-1)
+          tmp = tmp.replace('%20', ' '); //空格会被识别为%20,替换回来
+
+        that.setData({
+          //  toastText: Util.jsonToString(res.data),
+          toastText: tmp,
+        });
+        if (res == null || res.data == null) {
+          console.error('网络请求失败');
+          return;
+        }
+        else {
+          console.info('网络请求成功');
+        }
+      }
+    })
+  },
+
+  onTest: function () {
+    this.DoPostApi("KYC/GetKYCInfo","uid=127002");
+  },
+
+  GetKYCInfo: function () {
+    this.DoPostApi("KYC/GetKYCInfo","uid=127001");
+  }, 
+
+  Regist: function() {
+    this.DoPostApi("KYC/Regist","uid=127001&hashInfo=123456789");
+  }, 
+
+  mgrBalance: function () {
+    this.DoPostApi("Manager/Balance", "address=0x1a45d964dc5896f769465268b359f44c6da7d87d&cointype=eth");
+  }, 
+
+  Balance: function () {
+    this.DoPostApi("Manager/Balance", "address=0x99fcb46fccf902fb84e40546586542764f6e1214&cointype=eth");
+  }, 
+  //wcc end
+
   onLoad: function() {
     if (!wx.cloud) {
       wx.redirectTo({
@@ -46,93 +101,26 @@ Page({
     }
   },
 
-  //wcc
-  onPostApi: function () {
-    // post方式调用API
-    that = this;
-    wx.request({
-      url: "http://192.168.80.35:5123/KYC/GetKYCInfo",
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded"
+  onGetOpenid: function () {
+    // 调用云函数
+    wx.cloud.callFunction({
+      name: 'login',
+      data: {},
+      success: res => {
+        console.log('[云函数] [login] user openid: ', res.result.openid)
+        app.globalData.openid = res.result.openid
+        wx.navigateTo({
+          url: '../userConsole/userConsole',
+        })
       },
-      method: "POST",
-      //data: Util.json2Form({ cityname: "上海", key: "1430ec127e097e1113259c5e1be1ba70" }),
-      data: "uid=127002",
-
-      complete: function (res) {
-        console.info(res.data);
-        that.setData({
-          toastHidden: false,
-        //  toastText: Util.jsonToString(res.data.info),
-          toastText: Util.json2Show(res.data),
-        });
-        if (res == null || res.data == null) {
-          console.error('网络请求失败');
-          return;
-        }
-        else
-        {
-          console.info('网络请求成功');
-        }
+      fail: err => {
+        console.error('[云函数] [login] 调用失败', err)
+        wx.navigateTo({
+          url: '../deployFunctions/deployFunctions',
+        })
       }
     })
   },
-
-  onToastChanged: function () {
-    that.setData({ toastHidden: true });
-  },
-  //wcc end
- 
-
-  // 上传图片
-  // doUpload: function () {
-  //   // 选择图片
-  //   wx.chooseImage({
-  //     count: 1,
-  //     sizeType: ['compressed'],
-  //     sourceType: ['album', 'camera'],
-  //     success: function (res) {
-
-  //       wx.showLoading({
-  //         title: '上传中',
-  //       })
-
-  //       const filePath = res.tempFilePaths[0]
-        
-  //       // 上传图片
-  //       const cloudPath = 'my-image' + filePath.match(/\.[^.]+?$/)[0]
-  //       wx.cloud.uploadFile({
-  //         cloudPath,
-  //         filePath,
-  //         success: res => {
-  //           console.log('[上传文件] 成功：', res)
-
-  //           app.globalData.fileID = res.fileID
-  //           app.globalData.cloudPath = cloudPath
-  //           app.globalData.imagePath = filePath
-            
-  //           wx.navigateTo({
-  //             url: '../storageConsole/storageConsole'
-  //           })
-  //         },
-  //         fail: e => {
-  //           console.error('[上传文件] 失败：', e)
-  //           wx.showToast({
-  //             icon: 'none',
-  //             title: '上传失败',
-  //           })
-  //         },
-  //         complete: () => {
-  //           wx.hideLoading()
-  //         }
-  //       })
-
-  //     },
-  //     fail: e => {
-  //       console.error(e)
-  //     }
-  //   })
-  // },
 
 })
 
