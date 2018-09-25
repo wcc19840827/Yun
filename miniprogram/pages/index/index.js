@@ -46,75 +46,95 @@ Page({
     }
   },
 
-  onGetOpenid: function() {
-    // 调用云函数
-    wx.cloud.callFunction({
-      name: 'login',
-      data: {},
-      success: res => {
-        console.log('[云函数] [login] user openid: ', res.result.openid)
-        app.globalData.openid = res.result.openid
-        wx.navigateTo({
-          url: '../userConsole/userConsole',
-        })
+  //wcc
+  onPostApi: function () {
+    // post方式调用API
+    that = this;
+    wx.request({
+      url: "http://192.168.80.35:5123/KYC/GetKYCInfo",
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
       },
-      fail: err => {
-        console.error('[云函数] [login] 调用失败', err)
-        wx.navigateTo({
-          url: '../deployFunctions/deployFunctions',
-        })
+      method: "POST",
+      //data: Util.json2Form({ cityname: "上海", key: "1430ec127e097e1113259c5e1be1ba70" }),
+      data: "uid=127002",
+
+      complete: function (res) {
+        console.info(res.data);
+        that.setData({
+          toastHidden: false,
+        //  toastText: Util.jsonToString(res.data.info),
+          toastText: Util.json2Show(res.data),
+        });
+        if (res == null || res.data == null) {
+          console.error('网络请求失败');
+          return;
+        }
+        else
+        {
+          console.info('网络请求成功');
+        }
       }
     })
   },
+
+  onToastChanged: function () {
+    that.setData({ toastHidden: true });
+  },
+  //wcc end
+ 
 
   // 上传图片
-  doUpload: function () {
-    // 选择图片
-    wx.chooseImage({
-      count: 1,
-      sizeType: ['compressed'],
-      sourceType: ['album', 'camera'],
-      success: function (res) {
+  // doUpload: function () {
+  //   // 选择图片
+  //   wx.chooseImage({
+  //     count: 1,
+  //     sizeType: ['compressed'],
+  //     sourceType: ['album', 'camera'],
+  //     success: function (res) {
 
-        wx.showLoading({
-          title: '上传中',
-        })
+  //       wx.showLoading({
+  //         title: '上传中',
+  //       })
 
-        const filePath = res.tempFilePaths[0]
+  //       const filePath = res.tempFilePaths[0]
         
-        // 上传图片
-        const cloudPath = 'my-image' + filePath.match(/\.[^.]+?$/)[0]
-        wx.cloud.uploadFile({
-          cloudPath,
-          filePath,
-          success: res => {
-            console.log('[上传文件] 成功：', res)
+  //       // 上传图片
+  //       const cloudPath = 'my-image' + filePath.match(/\.[^.]+?$/)[0]
+  //       wx.cloud.uploadFile({
+  //         cloudPath,
+  //         filePath,
+  //         success: res => {
+  //           console.log('[上传文件] 成功：', res)
 
-            app.globalData.fileID = res.fileID
-            app.globalData.cloudPath = cloudPath
-            app.globalData.imagePath = filePath
+  //           app.globalData.fileID = res.fileID
+  //           app.globalData.cloudPath = cloudPath
+  //           app.globalData.imagePath = filePath
             
-            wx.navigateTo({
-              url: '../storageConsole/storageConsole'
-            })
-          },
-          fail: e => {
-            console.error('[上传文件] 失败：', e)
-            wx.showToast({
-              icon: 'none',
-              title: '上传失败',
-            })
-          },
-          complete: () => {
-            wx.hideLoading()
-          }
-        })
+  //           wx.navigateTo({
+  //             url: '../storageConsole/storageConsole'
+  //           })
+  //         },
+  //         fail: e => {
+  //           console.error('[上传文件] 失败：', e)
+  //           wx.showToast({
+  //             icon: 'none',
+  //             title: '上传失败',
+  //           })
+  //         },
+  //         complete: () => {
+  //           wx.hideLoading()
+  //         }
+  //       })
 
-      },
-      fail: e => {
-        console.error(e)
-      }
-    })
-  },
+  //     },
+  //     fail: e => {
+  //       console.error(e)
+  //     }
+  //   })
+  // },
 
 })
+
+var that;
+var Util = require('../utils/util.js');

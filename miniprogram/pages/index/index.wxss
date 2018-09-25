@@ -7,6 +7,20 @@ page {
   justify-content: flex-start;
 }
 
+.apiresult {
+  margin-top: 40rpx;
+  height: 500rpx;
+  width: 100%;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-left: none;
+  border-right: none;
+  display: flex;
+  flex-wrap:wrap;
+  white-space:pre-wrap;
+  /* flex-direction: row; */
+}
+
 .userinfo, .uploader, .tunnel {
   margin-top: 40rpx;
   height: 140rpx;
