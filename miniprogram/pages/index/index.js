@@ -7,15 +7,19 @@ Page({
     userInfo: {},
     logged: false,
     takeSession: false,
-    requestResult: ''
+    requestResult: '',
+    openid:""
   },
 
   //wcc
   DoPostApi: function (api,data) {
     // post方式调用API
     that = this;
+    wx.showLoading() //播等待动画
+
     wx.request({
-      url: "http://192.168.80.35:5123/" + api,
+    //  url: "https://192.168.80.35:5000/" + api,
+      url: "http://192.168.80.35:5000/" + api,
       header: {
         "Content-Type": "application/x-www-form-urlencoded"
       },
@@ -42,6 +46,8 @@ Page({
         }
       }
     })
+
+    wx.hideLoading()
   },
 
   onTest: function () {
@@ -49,19 +55,24 @@ Page({
   },
 
   GetKYCInfo: function () {
-    this.DoPostApi("KYC/GetKYCInfo","uid=127001");
+    var uid = this.data.openid;
+    this.DoPostApi("KYC/GetKYCInfo", "uid=" + uid);
   }, 
 
   Regist: function() {
-    this.DoPostApi("KYC/Regist","uid=127001&hashInfo=123456789");
+    var uid = this.data.openid;
+    var hashInfo = "12345678901234567890123456789012";
+    this.DoPostApi("KYC/Regist", "uid=" + uid + "&hashInfo=" + hashInfo);
   }, 
 
   mgrBalance: function () {
-    this.DoPostApi("Manager/Balance", "address=0x1a45d964dc5896f769465268b359f44c6da7d87d&cointype=eth");
+    var myaddress = "0x1a45d964dc5896f769465268b359f44c6da7d87d"
+    this.DoPostApi("Manager/Balance", "address=" + myaddress+"&cointype=eth");
   }, 
 
   Balance: function () {
-    this.DoPostApi("Manager/Balance", "address=0x99fcb46fccf902fb84e40546586542764f6e1214&cointype=eth");
+    var myaddress = "0x99fcb46fccf902fb84e40546586542764f6e1214"
+    this.DoPostApi("Manager/Balance", "address="+myaddress+"&cointype=eth");
   }, 
   //wcc end
 
@@ -72,34 +83,38 @@ Page({
       })
       return
     }
-
-    // 获取用户信息
-    wx.getSetting({
-      success: res => {
-        if (res.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-          wx.getUserInfo({
-            success: res => {
-              this.setData({
-                avatarUrl: res.userInfo.avatarUrl,
-                userInfo: res.userInfo
-              })
-            }
-          })
-        }
-      }
-    })
-  },
-
-  onGetUserInfo: function(e) {
-    if (!this.logged && e.detail.userInfo) {
-      this.setData({
-        logged: true,
-        avatarUrl: e.detail.userInfo.avatarUrl,
-        userInfo: e.detail.userInfo
-      })
+    else{
+      this.onGetOpenid();
     }
+
+    // 获取用户信息 (使用 wx.getUserInfo 接口直接弹出授权框的开发方式将逐步不再支持)
+    // wx.getSetting({
+    //   success: res => {
+    //     if (res.authSetting['scope.userInfo']) {
+    //       // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
+    //       wx.getUserInfo({
+    //         success: res => {
+    //           this.setData({
+    //             avatarUrl: res.userInfo.avatarUrl,
+    //             userInfo: res.userInfo,
+    //           })
+    //         }
+    //       })
+    //     }
+    //   }
+    // })
+
   },
+
+  // onGetUserInfo: function(e) {
+  //   if (!this.logged && e.detail.userInfo) {
+  //     this.setData({
+  //       logged: true,
+  //       avatarUrl: e.detail.userInfo.avatarUrl,
+  //       userInfo: e.detail.userInfo
+  //     })
+  //   }
+  // },
 
   onGetOpenid: function () {
     // 调用云函数
@@ -109,9 +124,13 @@ Page({
       success: res => {
         console.log('[云函数] [login] user openid: ', res.result.openid)
         app.globalData.openid = res.result.openid
-        wx.navigateTo({
-          url: '../userConsole/userConsole',
+        this.setData({
+          openid: res.result.openid
         })
+
+        // wx.navigateTo({
+        //   url: '../userConsole/userConsole',
+        // })
       },
       fail: err => {
         console.error('[云函数] [login] 调用失败', err)

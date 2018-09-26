@@ -1,6 +1,26 @@
 <!--index.wxml-->
 <view class="container">
 
+ <!-- 使用 button 组件，并将 open-type 指定为 getUserInfo 类型，获取用户基本信息 -->
+  <!-- <view class="userinfo">
+    <button     
+      open-type="getUserInfo" 
+      bindgetuserinfo="onGetUserInfo"
+      class="userinfo-avatar"
+      style="background-image: url({{avatarUrl}})"
+    ></button>
+    <view>
+      <button class="userinfo-nickname" bindtap="onGetOpenid">点击获取 openid</button>
+    </view>
+  </view> -->
+  
+   <!-- 用户 openid -->
+  <view class="uploader">
+    <!-- <view class="uploader-text" bindtap="onGetOpenid"><text>点击获取 openid</text></view> -->
+    <view class="tunnel-text"><text>我的openid</text></view>
+    <view >{{openid}}</view>
+  </view>
+
  <!-- test -->
  <!-- <view class="uploader">
     <view class="uploader-text" bindtap="onTest">
@@ -28,18 +48,6 @@
   <view>返回结果</view>
   <view class="apiresult">{{toastText}}</view>
 
-  <!-- 用户 openid -->
-  <view class="userinfo">
-    <button 
-      open-type="getUserInfo" 
-      bindgetuserinfo="onGetUserInfo"
-      class="userinfo-avatar"
-      style="background-image: url({{avatarUrl}})"
-    ></button>
-    <view>
-      <button class="userinfo-nickname" bindtap="onGetOpenid">点击获取 openid</button>
-    </view>
-  </view>
 
   <!-- 上传图片 -->
   <!-- <view class="uploader">
