@@ -15,11 +15,11 @@
   </view> -->
   
    <!-- 用户 openid -->
-  <view class="uploader">
-    <!-- <view class="uploader-text" bindtap="onGetOpenid"><text>点击获取 openid</text></view> -->
+   <!-- <view class="uploader-text" bindtap="onGetOpenid"><text>点击获取 openid</text></view> -->
+  <!-- <view class="uploader">
     <view class="tunnel-text"><text>我的openid</text></view>
     <view >{{openid}}</view>
-  </view>
+  </view> -->
 
  <!-- test -->
  <!-- <view class="uploader">
@@ -29,19 +29,20 @@
   </view> -->
 
   <view class="uploader">
-    <view class="tunnel-text"><text>我是用户</text></view>
-    <view class="uploader-text" bindtap="GetKYCInfo"><text>展示自己的KYC信息</text></view>
+    <view class="tunnel-text"><text>某用户</text></view>
+    <view >uid {{openid}}</view>
+    <view class="uploader-text" bindtap="GetKYCInfo"><text>KYC信息</text></view>
   </view>
 
   <view class="uploader">
-    <view class="tunnel-text"><text>我是银行</text></view>
-    <view class="uploader-text" bindtap="Balance"><text>查看ETH余额</text></view>
+    <view class="tunnel-text"><text>某机构</text></view>
+    <view class="uploader-text" bindtap="GetBalance"><text>Token余额</text></view>
     <view class="uploader-text" bindtap="Regist"><text>上传用户信息</text></view>
   </view>
 
   <view class="uploader">
-    <view class="tunnel-text"><text>我是管理员</text></view>
-    <view class="uploader-text" bindtap="mgrBalance"><text>查看ETH余额</text></view>
+    <view class="tunnel-text"><text>管理员</text></view>
+    <view class="uploader-text" bindtap="mgrGetBalance"><text>Token余额</text></view>
   </view>
 
   <view>_</view>

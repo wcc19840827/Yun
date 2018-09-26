@@ -32,11 +32,15 @@ Page({
         var tmp = Util.json2Show(res.data);
         while (tmp.indexOf('%20')!=-1)
           tmp = tmp.replace('%20', ' '); //空格会被识别为%20,替换回来
+        while (tmp.indexOf('%2B') != -1)
+          tmp = tmp.replace('%2B', '+');
 
         that.setData({
           //  toastText: Util.jsonToString(res.data),
           toastText: tmp,
         });
+
+        wx.hideLoading()  //停等待动画
         if (res == null || res.data == null) {
           console.error('网络请求失败');
           return;
@@ -47,7 +51,7 @@ Page({
       }
     })
 
-    wx.hideLoading()
+    
   },
 
   onTest: function () {
@@ -65,14 +69,14 @@ Page({
     this.DoPostApi("KYC/Regist", "uid=" + uid + "&hashInfo=" + hashInfo);
   }, 
 
-  mgrBalance: function () {
-    var myaddress = "0x1a45d964dc5896f769465268b359f44c6da7d87d"
-    this.DoPostApi("Manager/Balance", "address=" + myaddress+"&cointype=eth");
+  GetBalance: function () {
+    var myaddress = "0x99fcb46fccf902fb84e40546586542764f6e1214"
+    this.DoPostApi("KYCC/GetBalance", "address=" + myaddress);
   }, 
 
-  Balance: function () {
-    var myaddress = "0x99fcb46fccf902fb84e40546586542764f6e1214"
-    this.DoPostApi("Manager/Balance", "address="+myaddress+"&cointype=eth");
+  mgrGetBalance: function () {
+    var myaddress = "0x1a45d964dc5896f769465268b359f44c6da7d87d"
+    this.DoPostApi("KYCC/GetBalance", "address=" + myaddress);
   }, 
   //wcc end
 
