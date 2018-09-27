@@ -70,7 +70,7 @@ Page({
   }, 
 
   GetBalance: function () {
-    var myaddress = "0x99fcb46fccf902fb84e40546586542764f6e1214"
+    var myaddress = "0x261fe7219b33a3e4aa91d2744825d7e4d4aed5ad"
     this.DoPostApi("KYCC/GetBalance", "address=" + myaddress);
   }, 
 
