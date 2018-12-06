@@ -18,8 +18,9 @@ Page({
     wx.showLoading() //播等待动画
 
     wx.request({
-    //  url: "https://192.168.80.35:5000/" + api,
-      url: "http://192.168.80.35:5000/" + api,
+    // url: "https://192.168.80.35:5000/" + api,
+    // url: "http://192.168.80.35:5000/" + api,
+      url: "https://27513054.cucubao.com/" + api,
       header: {
         "Content-Type": "application/x-www-form-urlencoded"
       },
